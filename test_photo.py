@@ -52,19 +52,17 @@ def get_cameras():
     return cameras
 
 
-def main():
+def main(save_dir):
     cameras = get_cameras()
     images = take_photos(cameras)
 
-    save_dir = "{}/{}".format(LOG_DIR, get_timestamp())
+    save_dir = "{}/{}".format(save, get_timestamp())
     os.makedirs(save_dir)
     for camera_name, img in images.items():
         img_path = "{}/{}.png".format(save_dir, camera_name)
         cv2.imwrite(img_path, img)
 
-    # Sync drive and upload
-    # sync_gdrive()
-
 
 if __name__ == '__main__':
-    main()
+    test_imgs_dir = sys.argv[1]
+    main(test_imgs_dir)
