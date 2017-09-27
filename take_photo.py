@@ -37,6 +37,23 @@ def take_photos(cameras):
     return imgs
 
 
+def take_photos2(camera_names):
+    """
+        cameras: ['camera_0', 'camera_1', ...]
+        return: {'camera_0': img_0, 'camera_1': img_1, ...}
+    """
+    imgs = {}
+    for name in camera_names:
+        camera_id = re.search(CAMERA_DEVICE_PATTERN, name).group(1)
+        camera = cv2.VideoCapture(int(camera_id))
+        if camera.isOpened():
+            ret, img = camera.read()
+            if ret is not None:
+                imgs[camera_name] = img
+            camera.release()
+    return imgs
+
+
 def get_cameras():
     """
         cameras: {'camera_0': camera_0, 'camera_1': camera_1, ...}
@@ -52,9 +69,20 @@ def get_cameras():
     return cameras
 
 
+def get_camera_names():
+    """
+        cameras: ['camera_0', 'camera_1', ...]
+    """
+    camera_names = filter(lambda x: re.match(CAMERA_DEVICE_PATTERN, x), os.listdir(DEVICE_DIR))
+    print("Camera device names", camera_names)
+    return camera_names
+
+
 def main():
-    cameras = get_cameras()
-    images = take_photos(cameras)
+    # cameras = get_cameras()
+    camera_names = get_camera_names()
+    # images = take_photos(cameras)
+    images = take_photos2(camera_names)
 
     save_dir = "{}/{}".format(LOG_DIR, get_timestamp())
     os.makedirs(save_dir)
