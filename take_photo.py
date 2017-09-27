@@ -49,7 +49,7 @@ def take_photos2(camera_names):
         if camera.isOpened():
             ret, img = camera.read()
             if ret is not None:
-                imgs[camera_name] = img
+                imgs[name] = img
             camera.release()
     return imgs
 
